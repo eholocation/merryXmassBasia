@@ -270,264 +270,266 @@
 </div>
 
 <script>
-  const captions = [
-    "Najpiękniejszy uśmiech na świecie złapany moim okiem, aparatem i sercem.",
-    "Najśmieszniejsze wygłupy tylko z Tobą.",
-    "Najseksi uśmiech w całym wszechświecie!",
-    "Piękny uśmiech w nieporządku.",
-    "Uśmiech ode mnie dla Ciebie.",
-    "\"Uśmiechnij się! Dziękuję, że jesteś.\"",
-    "Uśmiechu również w radości jak i w smutku.",
-    "Pierwsze uśmiechy.",
-    "Uśmiech typu: \"Po prostu klasa sama w sobie!\"",
-    "Jak widać, pasujemy do siebie jak ulał.",
-    "Uśmiech także w bólu.",
-    "Uśmiech pełen zachwytu nad pięknem - niestety nie widać, bo trzymałem aparat.",
-    "\"Ja też dziękuje!\" :)",
-    "Uśmiech za najlepsze wybory!",
-    "Uśmiech za spokojne dnie i wieczory.",
-    "Kocham patrzeć w Twoje oczy.",
-    "Czasem są ważniejsze rzeczy niż uśmiech, ale wszyscy to rozumiemy. :)",
-    "Czasem trzeba też odpocząć.",
-    "By znów widzieć piękno.",
-    "Najsmaczniejsze owoce dają najlepsze uśmiechy.",
-    "Najlepsze uśmiechy, to najlepsze wspomnienia.",
-    "Najlepsze wspomnienia tylko z Tobą.",
-    "Nawet jeśli już dawno nas tu nie będzie, to podróż dla miliona uśmiechów.",
-    "Najlepszy prezent to Ty."
-  ];
+  const PASSWORD = "zapraszam";
+  const user = prompt("Hasło:");
+  if (user?.toLowerCase() !== PASSWORD.toLowerCase()) {
+    document.body.innerHTML = "<h1 style='font-family:sans-serif;text-align:center;margin-top:40px;'>...</h1>";
+    throw new Error("...");
+  } else {
+    const captions = [
+      "Najpiękniejszy uśmiech na świecie złapany moim okiem, aparatem i sercem.",
+      "Najśmieszniejsze wygłupy tylko z Tobą.",
+      "Najseksi uśmiech w całym wszechświecie!",
+      "Piękny uśmiech w nieporządku.",
+      "Uśmiech ode mnie dla Ciebie.",
+      "\"Uśmiechnij się! Dziękuję, że jesteś.\"",
+      "Uśmiechu również w radości jak i w smutku.",
+      "Pierwsze uśmiechy.",
+      "Uśmiech typu: \"Po prostu klasa sama w sobie!\"",
+      "Jak widać, pasujemy do siebie jak ulał.",
+      "Uśmiech także w bólu.",
+      "Uśmiech pełen zachwytu nad pięknem - niestety nie widać, bo trzymałem aparat.",
+      "\"Ja też dziękuje!\" :)",
+      "Uśmiech za najlepsze wybory!",
+      "Uśmiech za spokojne dnie i wieczory.",
+      "Kocham patrzeć w Twoje oczy.",
+      "Czasem są ważniejsze rzeczy niż uśmiech, ale wszyscy to rozumiemy. :)",
+      "Czasem trzeba też odpocząć.",
+      "By znów widzieć piękno.",
+      "Najsmaczniejsze owoce dają najlepsze uśmiechy.",
+      "Najlepsze uśmiechy, to najlepsze wspomnienia.",
+      "Najlepsze wspomnienia tylko z Tobą.",
+      "Nawet jeśli już dawno nas tu nie będzie, to podróż dla miliona uśmiechów.",
+      "Najlepszy prezent to Ty."
+    ];
 
-  // const colorNames = [
-  //   'Outerspace', 'North', 'Sinopia', 'AbsoluteZero', 'Xanadu', 'Xanthouse',
-  //   'Cerulean', 'Amethyst', 'Taupe', 'Fandango', 'Verdigris', 'Mauve', 'Saffron'
-  // ];
+      const colorNames = [
+      '#2D3436', // Outerspace
+      '#5D6D7E', // North
+      '#CB410B', // Sinopia
+      '#0048BA', // Absolute Zero
+      '#738678', // Xanadu
+      '#E9D66B', // Xanthouse
+      '#007BA7', // Cerulean
+      '#7F00FF', // Amethyst
+      '#483C32', // Taupe
+      '#B53389', // Fandango
+      '#43B3AE', // Verdigris
+      '#E0B0FF', // Mauve
+      '#F4C430', // Saffron
+    ];
+    const colorMap = {
+      Outerspace: '#2D3436',
+      North: '#5D6D7E',
+      Sinopia: '#CB410B',
+      AbsoluteZero: '#0048BA',
+      Xanadu: '#738678',
+      Xanthouse: '#E9D66B',
+      Cerulean: '#007BA7',
+      Amethyst: '#7F00FF',
+      Taupe: '#483C32',
+      Fandango: '#B53389',
+      Verdigris: '#43B3AE',
+      Mauve: '#E0B0FF',
+      Saffron: '#F4C430',
+    };
 
-    const colorNames = [
-    '#2D3436', // Outerspace
-    '#5D6D7E', // North
-    '#CB410B', // Sinopia
-    '#0048BA', // Absolute Zero
-    '#738678', // Xanadu
-    '#E9D66B', // Xanthouse
-    '#007BA7', // Cerulean
-    '#7F00FF', // Amethyst
-    '#483C32', // Taupe
-    '#B53389', // Fandango
-    '#43B3AE', // Verdigris
-    '#E0B0FF', // Mauve
-    '#F4C430', // Saffron
-  ];
-  const colorMap = {
-    Outerspace: '#2D3436',
-    North: '#5D6D7E',
-    Sinopia: '#CB410B',
-    AbsoluteZero: '#0048BA',
-    Xanadu: '#738678',
-    Xanthouse: '#E9D66B',
-    Cerulean: '#007BA7',
-    Amethyst: '#7F00FF',
-    Taupe: '#483C32',
-    Fandango: '#B53389',
-    Verdigris: '#43B3AE',
-    Mauve: '#E0B0FF',
-    Saffron: '#F4C430',
-  };
+  function applyRandomColors() {
+    const bg = colorNames[Math.floor(Math.random()*colorNames.length)];
+    const card = colorNames[Math.floor(Math.random()*colorNames.length)];
+    const accent = colorNames[Math.floor(Math.random()*colorNames.length)];
 
-function applyRandomColors() {
-  const bg = colorNames[Math.floor(Math.random()*colorNames.length)];
-  const card = colorNames[Math.floor(Math.random()*colorNames.length)];
-  const accent = colorNames[Math.floor(Math.random()*colorNames.length)];
+    document.documentElement.style.setProperty('--bg', bg);
+    document.documentElement.style.setProperty('--card', card);
+    document.documentElement.style.setProperty('--accent', accent);
 
-  document.documentElement.style.setProperty('--bg', bg);
-  document.documentElement.style.setProperty('--card', card);
-  document.documentElement.style.setProperty('--accent', accent);
-
-  /* tekst zawsze kontrastowy */
-  document.documentElement.style.setProperty('--text', '#222');
-}
-
-
-  function randomColorName(){
-    const keys = Object.keys(colorMap);
-    return keys[Math.floor(Math.random()*keys.length)];
+    /* tekst zawsze kontrastowy */
+    document.documentElement.style.setProperty('--text', '#222');
   }
 
-  function getImage(i){ return `images/${i+1}.jpg`; }
-  function getAudio(i){ return `audio/day${i+1}.mp3`; }
 
-  const defaultState = Array.from({length:24}, (_,i)=>({
-    index: i,
-    opened: false,
-    caption: captions[i]||'',
-    image: getImage(i),
-    audio: getAudio(i),
-    color: ''
-  }));
+    function randomColorName(){
+      const keys = Object.keys(colorMap);
+      return keys[Math.floor(Math.random()*keys.length)];
+    }
 
-  const grid = document.getElementById('grid');
-  const overlay = document.getElementById('overlay');
-  const modalImg = document.getElementById('modalImg');
-  const modalText = document.getElementById('modalText');
-  const modalTitle = document.getElementById('modalTitle');
-  const closeBtn = document.getElementById('closeBtn');
+    function getImage(i){ return `images/${i+1}.jpg`; }
+    function getAudio(i){ return `audio/day${i+1}.mp3`; }
 
-  // to be removed!!
-  const controls = document.createElement('div');
-  controls.style.textAlign = 'center';
-  controls.style.marginTop = '12px';
-  controls.innerHTML = `
-    <button class="close-btn" id="resetState">Reset</button>
-  `;
-  document.querySelector('.wrap').appendChild(controls);
+    const defaultState = Array.from({length:24}, (_,i)=>({
+      index: i,
+      opened: false,
+      caption: captions[i]||'',
+      image: getImage(i),
+      audio: getAudio(i),
+      color: ''
+    }));
 
-  const audioEl = document.createElement('audio');
-  audioEl.preload = 'auto';
+    const grid = document.getElementById('grid');
+    const overlay = document.getElementById('overlay');
+    const modalImg = document.getElementById('modalImg');
+    const modalText = document.getElementById('modalText');
+    const modalTitle = document.getElementById('modalTitle');
+    const closeBtn = document.getElementById('closeBtn');
 
-  let state = loadState();
+    // to be removed!!
+    const controls = document.createElement('div');
+    controls.style.textAlign = 'center';
+    controls.style.marginTop = '12px';
+    controls.innerHTML = `
+      <button class="close-btn" id="resetState">Reset</button>
+    `;
+    document.querySelector('.wrap').appendChild(controls);
 
-  function loadState(){
-    try{
-      const raw = localStorage.getItem('advent_state_v1');
-      if(raw) return JSON.parse(raw);
-    }catch(e){}
-    return JSON.parse(JSON.stringify(defaultState));
-  }
+    const audioEl = document.createElement('audio');
+    audioEl.preload = 'auto';
 
-  function saveState(){
-    localStorage.setItem('advent_state_v1', JSON.stringify(state));
-  }
+    let state = loadState();
 
-  function renderGrid(){
-    grid.innerHTML = '';
-    state.forEach((s,i)=>{
-      const d = document.createElement('button');
-      d.className = 'door' + (s.opened? ' opened':'');
-      d.setAttribute('data-index', i);
-      d.setAttribute('aria-pressed', s.opened? 'true' : 'false');
-      d.innerHTML = `<span class="num">${i+1}</span>`;
-      if(s.opened){
-        d.style.backgroundImage = `url('${s.image}')`;
-        d.style.backgroundSize = 'cover';
-        d.style.backgroundRepeat = 'no-repeat';
-        d.style.backgroundPosition = 'center';
-      }
-      d.addEventListener('click', ()=>{
-        // const today = Number(new Date().getDate()); // pobiera aktualny dzień miesiąca (1-31)
-        const today = 4;
-        // if(i+1 > today){
-        //   alert(`To okienko możesz otworzyć dopiero ${i+1} grudnia. Dzisiaj jest ${today} grudnia.`);
-        //   return;
-        // } else {
-          openModal(i);
-        // }
+    function loadState(){
+      try{
+        const raw = localStorage.getItem('advent_state_v1');
+        if(raw) return JSON.parse(raw);
+      }catch(e){}
+      return JSON.parse(JSON.stringify(defaultState));
+    }
+
+    function saveState(){
+      localStorage.setItem('advent_state_v1', JSON.stringify(state));
+    }
+
+    function renderGrid(){
+      grid.innerHTML = '';
+      state.forEach((s,i)=>{
+        const d = document.createElement('button');
+        d.className = 'door' + (s.opened? ' opened':'');
+        d.setAttribute('data-index', i);
+        d.setAttribute('aria-pressed', s.opened? 'true' : 'false');
+        d.innerHTML = `<span class="num">${i+1}</span>`;
+        if(s.opened){
+          d.style.backgroundImage = `url('${s.image}')`;
+          d.style.backgroundSize = 'cover';
+          d.style.backgroundRepeat = 'no-repeat';
+          d.style.backgroundPosition = 'center';
+        }
+        d.addEventListener('click', ()=>{
+          // const today = Number(new Date().getDate()); // pobiera aktualny dzień miesiąca (1-31)
+          const today = 4;
+          // if(i+1 > today){
+          //   alert(`To okienko możesz otworzyć dopiero ${i+1} grudnia. Dzisiaj jest ${today} grudnia.`);
+          //   return;
+          // } else {
+            openModal(i);
+          // }
+        });
+        grid.appendChild(d);
       });
-      grid.appendChild(d);
+    }
+
+    let currentIndex = 0;
+
+    function applyRandomColorToState(s){
+      const name = colorNames[Math.floor(Math.random()*colorNames.length)];
+      s.color = name;
+      document.body.style.transition = 'background 1.6s ease';
+      document.body.style.background = name;
+      return name;
+    }
+
+    function openModal(i){
+      console.log('before');
+      applyRandomColors();
+      console.log('after');
+      currentIndex = i;
+      const s = state[i];
+      s.opened = true;
+      s.image = s.image || getImage(i);
+
+      const doorEl = document.querySelector(`.door[data-index='${i}']`);
+      if(doorEl){
+        doorEl.style.transform = 'scale(1.05)';
+        setTimeout(()=>{doorEl.style.transform='scale(1.02)';}, 1250);
+      }
+
+      modalText.textContent = s.caption || '';
+      modalImg.src = s.image;
+      modalImg.alt = `Zdjęcie dzień ${i+1}`;
+
+      audioEl.src = s.audio || 'audio/music.mp3';
+      audioEl.currentTime = 0;
+      audioEl.play().catch(()=>{});
+
+      overlay.classList.add('show');
+      overlay.setAttribute('aria-hidden','false');
+
+      saveState();
+      renderGrid();
+    }
+
+    function closeModal(){
+      overlay.classList.remove('show');
+      overlay.setAttribute('aria-hidden','true');
+      try{ audioEl.pause(); }catch(e){}
+      saveState();
+    }
+
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', (e)=>{
+      if (e.target === overlay) closeModal();
     });
-  }
+    document.querySelector('.modal').addEventListener('click', e => {
+      e.stopPropagation();
+    });
+    document.addEventListener('keydown', (e)=>{
+      if(overlay.classList.contains('show') && e.key==='Escape') closeModal();
+    });
 
-  let currentIndex = 0;
-
-  function applyRandomColorToState(s){
-    const name = colorNames[Math.floor(Math.random()*colorNames.length)];
-    s.color = name;
-    document.body.style.transition = 'background 1.6s ease';
-    document.body.style.background = name;
-    return name;
-  }
-
-  function openModal(i){
-    console.log('before');
-    applyRandomColors();
-    console.log('after');
-    currentIndex = i;
-    const s = state[i];
-    s.opened = true;
-    s.image = s.image || getImage(i);
-
-    const doorEl = document.querySelector(`.door[data-index='${i}']`);
-    if(doorEl){
-      doorEl.style.transform = 'scale(1.05)';
-      setTimeout(()=>{doorEl.style.transform='scale(1.02)';}, 1250);
+    function parseCsvAndApply(text){
+      const lines = text.split(/\r?\n/).filter(l=>l.trim());
+      if(lines.length<2) return alert('Nieprawidłowy plik CSV');
+      const header = lines[0].split(',').map(h=>h.trim().toLowerCase());
+      const idxMap = {}; header.forEach((h,i)=> idxMap[h]=i);
+      const newState = JSON.parse(JSON.stringify(defaultState));
+      for(let i=1;i<lines.length;i++){
+        const row = splitCsvLine(lines[i]);
+        if(row.length<1) continue;
+        const index = parseInt(row[idxMap['index']]||i-1,10);
+        if(isNaN(index) || index<0 || index>23) continue;
+        newState[index].opened = (String(row[idxMap['opened']]||'0').trim()==='1');
+        newState[index].caption = unquote(row[idxMap['caption']]);
+        newState[index].image = unquote(row[idxMap['image']]) || getImage(index);
+        newState[index].audio = unquote(row[idxMap['audio']]) || getAudio(index);
+        newState[index].color = unquote(row[idxMap['color']]) || '';
+      }
+      state = newState;
+      saveState();
+      renderGrid();
+      alert('CSV załadowane.');
     }
 
-    modalText.textContent = s.caption || '';
-    modalImg.src = s.image;
-    modalImg.alt = `Zdjęcie dzień ${i+1}`;
-
-    audioEl.src = s.audio || 'audio/music.mp3';
-    audioEl.currentTime = 0;
-    audioEl.play().catch(()=>{});
-
-    overlay.classList.add('show');
-    overlay.setAttribute('aria-hidden','false');
-
-    saveState();
-    renderGrid();
-  }
-
-  function closeModal(){
-    overlay.classList.remove('show');
-    overlay.setAttribute('aria-hidden','true');
-    try{ audioEl.pause(); }catch(e){}
-    saveState();
-  }
-
-  closeBtn.addEventListener('click', closeModal);
-  overlay.addEventListener('click', (e)=>{
-    if (e.target === overlay) closeModal();
-  });
-  document.querySelector('.modal').addEventListener('click', e => {
-    e.stopPropagation();
-  });
-  document.addEventListener('keydown', (e)=>{
-    if(overlay.classList.contains('show') && e.key==='Escape') closeModal();
-  });
-
-  function parseCsvAndApply(text){
-    const lines = text.split(/\r?\n/).filter(l=>l.trim());
-    if(lines.length<2) return alert('Nieprawidłowy plik CSV');
-    const header = lines[0].split(',').map(h=>h.trim().toLowerCase());
-    const idxMap = {}; header.forEach((h,i)=> idxMap[h]=i);
-    const newState = JSON.parse(JSON.stringify(defaultState));
-    for(let i=1;i<lines.length;i++){
-      const row = splitCsvLine(lines[i]);
-      if(row.length<1) continue;
-      const index = parseInt(row[idxMap['index']]||i-1,10);
-      if(isNaN(index) || index<0 || index>23) continue;
-      newState[index].opened = (String(row[idxMap['opened']]||'0').trim()==='1');
-      newState[index].caption = unquote(row[idxMap['caption']]);
-      newState[index].image = unquote(row[idxMap['image']]) || getImage(index);
-      newState[index].audio = unquote(row[idxMap['audio']]) || getAudio(index);
-      newState[index].color = unquote(row[idxMap['color']]) || '';
+    function splitCsvLine(line){
+      const res = []; let cur=''; let inQ=false;
+      for(let i=0;i<line.length;i++){
+        const ch = line[i];
+        if(ch==='"') { if(inQ && line[i+1]==='"'){ cur+='"'; i++; } else inQ=!inQ; continue; }
+        if(ch===',' && !inQ){ res.push(cur); cur=''; continue; }
+        cur += ch;
+      }
+      res.push(cur);
+      return res;
     }
-    state = newState;
-    saveState();
+    function unquote(v){ if(v==null) return ''; v=String(v); if(v.startsWith('"') && v.endsWith('"')) v=v.slice(1,-1).replace(/""/g,'"'); return v; }
+
+    document.getElementById('resetState').addEventListener('click', ()=>{
+      if(!confirm('Czy na pewno zresetować wszystkie okienka?')) return;
+      state = JSON.parse(JSON.stringify(defaultState));
+      localStorage.removeItem('advent_state_v1');
+      renderGrid();
+    });
+
+    // render początkowy
     renderGrid();
-    alert('CSV załadowane.');
   }
-
-  function splitCsvLine(line){
-    const res = []; let cur=''; let inQ=false;
-    for(let i=0;i<line.length;i++){
-      const ch = line[i];
-      if(ch==='"') { if(inQ && line[i+1]==='"'){ cur+='"'; i++; } else inQ=!inQ; continue; }
-      if(ch===',' && !inQ){ res.push(cur); cur=''; continue; }
-      cur += ch;
-    }
-    res.push(cur);
-    return res;
-  }
-  function unquote(v){ if(v==null) return ''; v=String(v); if(v.startsWith('"') && v.endsWith('"')) v=v.slice(1,-1).replace(/""/g,'"'); return v; }
-
-  document.getElementById('resetState').addEventListener('click', ()=>{
-    if(!confirm('Czy na pewno zresetować wszystkie okienka?')) return;
-    state = JSON.parse(JSON.stringify(defaultState));
-    localStorage.removeItem('advent_state_v1');
-    renderGrid();
-  });
-
-  // render początkowy
-  renderGrid();
 </script>
 </body>
 </html>
