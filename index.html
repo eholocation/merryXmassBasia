@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <link rel="icon" href="images/1.jpg" type="image/png">
+  <link rel="icon" href="images/6.jpg" type="image/png">
   <title>🎄 KALENDARZ ANDWENTOWY BASI! 🎄</title>
   <style>
     /* --- Styl Japandi --- */
@@ -182,7 +182,7 @@
     @media (max-width: 700px) {
 
       :root {
-        --door-size: calc((100vw - 32px) / 2); /* 2 kolumny, mniejsze odstępy */
+        --door-size: calc((100vw - 32px) / 2);
       }
 
       .wrap {
@@ -199,9 +199,10 @@
         border-radius: 10px;
       }
 
+      /* — normalna czytelna wielkość cyfr — */
       .door .num {
-        font-size: 120%;
-        transform: scale(3.4); /* dopasowany do 70% drzwi */
+        font-size: 180%;
+        transform: scale(1.6);
       }
 
       /* --- MODAL MOBILE --- */
@@ -212,40 +213,43 @@
       .modal {
         width: 100%;
         height: 100%;
+        display: flex;
         align-items: center;
         justify-content: center;
       }
 
       .modal-content {
         width: 100%;
-        height: 100%;
+        height: auto;
+        max-height: 100%;
         border-radius: 0;
       }
 
       .modal img {
         width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
+        height: auto;
+        max-height: 100vh;
+        object-fit: contain;
         border-radius: 0;
+        background:black;
       }
 
       .modal-text {
-        top: auto;
+        position: absolute;
         bottom: 24px;
         left: 50%;
         transform: translateX(-50%);
-        width: 90%;
+        width: 85%;
         font-size: clamp(14px, 4vw, 22px);
       }
 
       .close-btn {
-        top: 16px;
-        right: 16px;
+        top: 14px;
+        right: 14px;
         padding: 6px 10px;
         font-size: 14px;
       }
-      }
+    }
 
   </style>
 </head>
@@ -329,20 +333,19 @@
     Saffron: '#F4C430',
   };
 
-  function applyRandomColors(){
+function applyRandomColors() {
+  const bg = colorNames[Math.floor(Math.random()*colorNames.length)];
+  const card = colorNames[Math.floor(Math.random()*colorNames.length)];
+  const accent = colorNames[Math.floor(Math.random()*colorNames.length)];
 
-    const bg = colorNames[Math.floor(Math.random()*colorNames.length)];
-    const card = colorNames[Math.floor(Math.random()*colorNames.length)];
-    const accent = colorNames[Math.floor(Math.random()*colorNames.length)];
-    const text = colorNames[Math.floor(Math.random()*colorNames.length)];
+  document.documentElement.style.setProperty('--bg', bg);
+  document.documentElement.style.setProperty('--card', card);
+  document.documentElement.style.setProperty('--accent', accent);
 
-    document.body.style.background = bg;
-    document.body.style.color = text;
-    document.documentElement.style.setProperty('--bg', bg);
-    document.documentElement.style.setProperty('--card', card);
-    document.documentElement.style.setProperty('--accent', accent);
-    document.documentElement.style.setProperty('--text', text);
-  }
+  /* tekst zawsze kontrastowy */
+  document.documentElement.style.setProperty('--text', '#222');
+}
+
 
   function randomColorName(){
     const keys = Object.keys(colorMap);
@@ -401,12 +404,12 @@
       d.className = 'door' + (s.opened? ' opened':'');
       d.setAttribute('data-index', i);
       d.setAttribute('aria-pressed', s.opened? 'true' : 'false');
-      d.innerHTML = `<span id="doorNum" class="num">${i+1}</span>`;
+      d.innerHTML = `<span class="num">${i+1}</span>`;
       if(s.opened){
         d.style.backgroundImage = `url('${s.image}')`;
         d.style.backgroundSize = 'cover';
+        d.style.backgroundRepeat = 'no-repeat';
         d.style.backgroundPosition = 'center';
-        d.style.color = '#111';
       }
       d.addEventListener('click', ()=>{
         // const today = Number(new Date().getDate()); // pobiera aktualny dzień miesiąca (1-31)
@@ -470,7 +473,12 @@
   }
 
   closeBtn.addEventListener('click', closeModal);
-  overlay.addEventListener('click', (e)=>{ if(e.target===overlay) closeModal(); });
+  overlay.addEventListener('click', (e)=>{
+    if (e.target === overlay) closeModal();
+  });
+  document.querySelector('.modal').addEventListener('click', e => {
+    e.stopPropagation();
+  });
   document.addEventListener('keydown', (e)=>{
     if(overlay.classList.contains('show') && e.key==='Escape') closeModal();
   });
