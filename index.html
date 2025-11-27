@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Kalendarz adwentowy</title>
+  <link rel="icon" href="images/1.jpg" type="image/png">
+  <title>🎄 KALENDARZ ANDWENTOWY BASI! 🎄</title>
   <style>
     /* --- Styl Japandi --- */
     :root{
@@ -73,14 +74,20 @@
       transform: scale(1.02);
       box-shadow: inset 0 0 0 1200px rgba(255,255,255,0.05);
     }
-
-    .door .num{
-      position:absolute;
-      top:8px;
-      left:10px;
-      font-weight:600;
-      color:var(--accent);
-      font-size:14px;
+    .door.opened .num {
+      opacity: 0;
+      transform: scale(0.5);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    .door .num {
+      position: relative;      /* remove absolute */
+      top: auto;
+      left: auto;
+      font-size: 150%;          /* scales with door size */
+      transform: scale(5);   /* adjust until it visually fills ~70% */
+      font-weight: 700;
+      color: var(--accent);
+      pointer-events: none;
     }
 
     .door .label{
@@ -90,78 +97,78 @@
       font-weight:500;
     }
 
-    .overlay{
-      position:fixed;
-      inset:0;
-      background:rgba(245,240,234,0.9);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      z-index:50;
-      padding:20px;
-      opacity:0;
-      pointer-events:none;
-      transition:opacity .3s ease;
+    /* Updated modal styles */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5); /* semi-transparent overlay */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
     }
 
-    .overlay.show{
-      opacity:1;
-      pointer-events:auto;
-      transition: 1.6s ease;
+    .overlay.show {
+      opacity: 1;
+      pointer-events: auto;
     }
 
-    .modal{
-      background:var(--card);
-      border:1px solid #d4cbbd;
-      border-radius:12px;
-      max-width:900px;
-      width:100%;
-      max-height:90vh;
-      overflow:auto;
-      padding:24px;
-      color:var(--text);
-      display:flex;
-      flex-direction:column;
-      gap:12px;
-      opacity:0;
-      transform: translateY(-20px);
-      transition: opacity .35s ease, transform .35s ease;
+    .modal {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      max-width: 90vw;
+      max-height: 90vh;
     }
 
-    .overlay.show .modal{
-      opacity:1;
-      transform: translateY(0);
+    .modal-content {
+      position: relative;
+      width: 100%;
+      height: 100%;
     }
 
-    .modal img{
-      max-width:360px;
-      width:40%;
-      border-radius:12px;
-      object-fit:cover;
-      margin-bottom:12px;
+    .modal img {
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      display: block;
+      object-fit: cover;
     }
 
-    .modal h2{
-      margin:0 0 12px;
-      font-size:22px;
-      color:var(--accent);
-      font-weight:500;
+    .modal-text {
+      position: absolute;
+      top: 80%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: clamp(16px, 2vw, 28px);
+      font-weight: 600;
+      text-align: center;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.6);
+      padding: 0 12px;
     }
 
-    .close-btn{
-      background:none;
-      border:1px solid #b8ada2;
-      padding:8px 12px;
-      border-radius:10px;
-      color:var(--accent);
-      cursor:pointer;
-      font-weight:500;
-      transition: background 1.2s, color .2s;
+    .close-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(0,0,0,0.4);
+      border: none;
+      padding: 8px 12px;
+      border-radius: 10px;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
     }
 
-    .close-btn:hover{
-      background:var(--accent);
-      color:var(--bg);
+    .close-btn:hover {
+      background: rgba(0,0,0,0.7);
     }
 
     .footer{
@@ -181,60 +188,103 @@
 </head>
 <body>
 <div class="wrap">
-  <h1>Kalendarz adwentowy 🎄</h1>
   <div class="grid" id="grid"></div>
-  <div class="footer">Kliknij dzień, aby otworzyć okienko. Pod każdym znajdziesz zdjęcie i wiadomość dla <span class="surprise">Twojej żony</span>.</div>
 </div>
 
 <!-- Modal -->
 <div class="overlay" id="overlay" role="dialog" aria-hidden="true">
   <div class="modal" role="document">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-      <h2 id="modalTitle"> </h2>
-      <div>
-        <button class="close-btn" id="closeBtn">✕</button>
-      </div>
-    </div>
-    <div class="top">
+    <div class="modal-content">
       <img id="modalImg" src="" alt="Zdjęcie" />
-      <div class="txt">
-        <p id="modalText"></p>
-      </div>
+      <div class="modal-text" id="modalText"></div>
+      <button class="close-btn" id="closeBtn">✕</button>
     </div>
   </div>
 </div>
 
 <script>
   const captions = [
-    "Dzień 1 — Kocham Cię bardziej niż kawę rano.",
-    "Dzień 2 — Razem na zawsze.",
-    "Dzień 3 — Najlepsze wspomnienia tworzymy razem.",
-    "Dzień 4 — Jesteś moim szczęściem.",
-    "Dzień 5 — Śmiech z Tobą to mój ulubiony dźwięk.",
-    "Dzień 6 — Dziękuję, że jesteś.",
-    "Dzień 7 — Pamiętasz naszą pierwszą randkę? Kocham to wspomnienie.",
-    "Dzień 8 — Jesteś piękna, wewnątrz i na zewnątrz.",
-    "Dzień 9 — Małe gesty wielka miłość.",
-    "Dzień 10 — Z Tobą każdy dzień jest świąteczny.",
-    "Dzień 11 — Jesteś moją inspiracją.",
-    "Dzień 12 — Razem możemy wszystko.",
-    "Dzień 13 — Pocałunek dla szczęścia.",
-    "Dzień 14 — Dziękuję za Twoją cierpliwość.",
-    "Dzień 15 — Najlepsza partnerka do przygód.",
-    "Dzień 16 — Kocham Twoje oczy.",
-    "Dzień 17 — Twoje wsparcie znaczy wszystko.",
-    "Dzień 18 — Kolejne święta razem — marzenie.",
-    "Dzień 19 — Jesteś moim domem.",
-    "Dzień 20 — Twoje uśmiechy rozświetlają dni.",
-    "Dzień 21 — Nie ma nikogo jak Ty.",
-    "Dzień 22 — Ta noc jest nasza.",
-    "Dzień 23 — Już prawie święta! Kocham Cię.",
-    "Dzień 24 — Największy prezent to Ty."
+    "Najpiękniejszy uśmiech na świecie złapany moim okiem, aparatem i sercem.",
+    "Najśmieszniejsze wygłupy tylko z Tobą.",
+    "Najseksi uśmiech w całym wszechświecie!",
+    "Piękny uśmiech w nieporządku.",
+    "Uśmiech ode mnie dla Ciebie.",
+    "\"Uśmiechnij się! Dziękuję, że jesteś.\"",
+    "Uśmiechu również w radości jak i w smutku.",
+    "Pierwsze uśmiechy.",
+    "Uśmiech typu: \"Po prostu klasa sama w sobie!\"",
+    "Jak widać, pasujemy do siebie jak ulał.",
+    "Uśmiech także w bólu.",
+    "Uśmiech pełen zachwytu nad pięknem - niestety nie widać, bo trzymałem aparat.",
+    "\"Ja też dziękuje!\" :)",
+    "Uśmiech za najlepsze wybory!",
+    "Uśmiech za spokojne dnie i wieczory.",
+    "Kocham patrzeć w Twoje oczy.",
+    "Czasem są ważniejsze rzeczy niż uśmiech, ale wszyscy to rozumiemy. :)",
+    "Czasem trzeba też odpocząć.",
+    "By znów widzieć piękno.",
+    "Najsmaczniejsze owoce dają najlepsze uśmiechy.",
+    "Najlepsze uśmiechy, to najlepsze wspomnienia.",
+    "Najlepsze wspomnienia tylko z Tobą.",
+    "Nawet jeśli już dawno nas tu nie będzie, to podróż dla miliona uśmiechów.",
+    "Najlepszy prezent to Ty."
   ];
 
-  const colorNames = [
-    'Crimson','Gold','Indigo','Coral','Salmon','Turquoise','Khaki','Plum','Olive','Navy','Chocolate','Teal','RebeccaPurple','DarkOrange','FireBrick'
+  // const colorNames = [
+  //   'Outerspace', 'North', 'Sinopia', 'AbsoluteZero', 'Xanadu', 'Xanthouse',
+  //   'Cerulean', 'Amethyst', 'Taupe', 'Fandango', 'Verdigris', 'Mauve', 'Saffron'
+  // ];
+
+    const colorNames = [
+    '#2D3436', // Outerspace
+    '#5D6D7E', // North
+    '#CB410B', // Sinopia
+    '#0048BA', // Absolute Zero
+    '#738678', // Xanadu
+    '#E9D66B', // Xanthouse
+    '#007BA7', // Cerulean
+    '#7F00FF', // Amethyst
+    '#483C32', // Taupe
+    '#B53389', // Fandango
+    '#43B3AE', // Verdigris
+    '#E0B0FF', // Mauve
+    '#F4C430', // Saffron
   ];
+  const colorMap = {
+    Outerspace: '#2D3436',
+    North: '#5D6D7E',
+    Sinopia: '#CB410B',
+    AbsoluteZero: '#0048BA',
+    Xanadu: '#738678',
+    Xanthouse: '#E9D66B',
+    Cerulean: '#007BA7',
+    Amethyst: '#7F00FF',
+    Taupe: '#483C32',
+    Fandango: '#B53389',
+    Verdigris: '#43B3AE',
+    Mauve: '#E0B0FF',
+    Saffron: '#F4C430',
+  };
+
+  function applyRandomColors(){
+
+    const bg = colorNames[Math.floor(Math.random()*colorNames.length)];
+    const card = colorNames[Math.floor(Math.random()*colorNames.length)];
+    const accent = colorNames[Math.floor(Math.random()*colorNames.length)];
+    const text = colorNames[Math.floor(Math.random()*colorNames.length)];
+
+    document.body.style.background = bg;
+    document.body.style.color = text;
+    document.documentElement.style.setProperty('--bg', bg);
+    document.documentElement.style.setProperty('--card', card);
+    document.documentElement.style.setProperty('--accent', accent);
+    document.documentElement.style.setProperty('--text', text);
+  }
+
+  function randomColorName(){
+    const keys = Object.keys(colorMap);
+    return keys[Math.floor(Math.random()*keys.length)];
+  }
 
   function getImage(i){ return `images/${i+1}.jpg`; }
   function getAudio(i){ return `audio/day${i+1}.mp3`; }
@@ -255,16 +305,12 @@
   const modalTitle = document.getElementById('modalTitle');
   const closeBtn = document.getElementById('closeBtn');
 
+  // to be removed!!
   const controls = document.createElement('div');
   controls.style.textAlign = 'center';
   controls.style.marginTop = '12px';
   controls.innerHTML = `
-    <button class="close-btn" id="exportCsv">Export CSV</button>
-    <label class="close-btn" style="cursor:pointer;">
-      Import CSV <input id="importCsv" type="file" accept="text/csv" style="display:none">
-    </label>
     <button class="close-btn" id="resetState">Reset</button>
-    <span style="margin-left:12px;font-size:13px;opacity:.8">(Auto-save w localStorage + możliwość eksportu/importu .csv)</span>
   `;
   document.querySelector('.wrap').appendChild(controls);
 
@@ -287,13 +333,12 @@
 
   function renderGrid(){
     grid.innerHTML = '';
-    const today = new Date().getDate();
     state.forEach((s,i)=>{
       const d = document.createElement('button');
       d.className = 'door' + (s.opened? ' opened':'');
       d.setAttribute('data-index', i);
       d.setAttribute('aria-pressed', s.opened? 'true' : 'false');
-      d.innerHTML = `<span class="num">${i+1}</span><div class="label">Dzień ${i+1}</div>`;
+      d.innerHTML = `<span id="doorNum" class="num">${i+1}</span>`;
       if(s.opened){
         d.style.backgroundImage = `url('${s.image}')`;
         d.style.backgroundSize = 'cover';
@@ -301,12 +346,14 @@
         d.style.color = '#111';
       }
       d.addEventListener('click', ()=>{
-        const today = new Date().getDate(); // pobiera aktualny dzień miesiąca (1-31)
-        if(i+1>today && !s.opened){
-          alert(`To okienko możesz otworzyć dopiero ${i+1} grudnia. Dzisiaj jest ${today} grudnia.`);
-          return;
-        }
-        openModal(i);
+        // const today = Number(new Date().getDate()); // pobiera aktualny dzień miesiąca (1-31)
+        const today = 4;
+        // if(i+1 > today){
+        //   alert(`To okienko możesz otworzyć dopiero ${i+1} grudnia. Dzisiaj jest ${today} grudnia.`);
+        //   return;
+        // } else {
+          openModal(i);
+        // }
       });
       grid.appendChild(d);
     });
@@ -323,6 +370,9 @@
   }
 
   function openModal(i){
+    console.log('before');
+    applyRandomColors();
+    console.log('after');
     currentIndex = i;
     const s = state[i];
     s.opened = true;
@@ -334,9 +384,6 @@
       setTimeout(()=>{doorEl.style.transform='scale(1.02)';}, 1250);
     }
 
-    const color = applyRandomColorToState(s);
-
-    modalTitle.textContent = `Dzień ${i+1} — ${color}`;
     modalText.textContent = s.caption || '';
     modalImg.src = s.image;
     modalImg.alt = `Zdjęcie dzień ${i+1}`;
@@ -363,30 +410,6 @@
   overlay.addEventListener('click', (e)=>{ if(e.target===overlay) closeModal(); });
   document.addEventListener('keydown', (e)=>{
     if(overlay.classList.contains('show') && e.key==='Escape') closeModal();
-  });
-
-  // CSV export/import
-  document.getElementById('exportCsv').addEventListener('click', ()=>{
-    const header = ['index','opened','caption','image','audio','color'];
-    const rows = [header.join(',')];
-    state.forEach(s=>{
-      const esc = v => '"' + String(v||'').replace(/"/g,'""') + '"';
-      rows.push([s.index, s.opened?1:0, esc(s.caption), esc(s.image), esc(s.audio), esc(s.color)].join(','));
-    });
-    const blob = new Blob([rows.join('\r\n')], {type:'text/csv;charset=utf-8;'});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a'); a.href = url; a.download = 'advent-state.csv'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-  });
-
-  document.getElementById('importCsv').addEventListener('change', (e)=>{
-    const f = e.target.files[0];
-    if(!f) return;
-    const reader = new FileReader();
-    reader.onload = (ev)=>{
-      parseCsvAndApply(ev.target.result);
-      e.target.value = '';
-    };
-    reader.readAsText(f, 'utf-8');
   });
 
   function parseCsvAndApply(text){
