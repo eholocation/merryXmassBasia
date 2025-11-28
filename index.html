@@ -338,18 +338,18 @@
       Saffron: '#F4C430',
     };
 
-  function applyRandomColors() {
-    const bg = colorNames[Math.floor(Math.random()*colorNames.length)];
-    const card = colorNames[Math.floor(Math.random()*colorNames.length)];
-    const accent = colorNames[Math.floor(Math.random()*colorNames.length)];
+    function applyRandomColors() {
+      const bg = colorNames[Math.floor(Math.random()*colorNames.length)];
+      const card = colorNames[Math.floor(Math.random()*colorNames.length)];
+      const accent = colorNames[Math.floor(Math.random()*colorNames.length)];
 
-    document.documentElement.style.setProperty('--bg', bg);
-    document.documentElement.style.setProperty('--card', card);
-    document.documentElement.style.setProperty('--accent', accent);
+      document.documentElement.style.setProperty('--bg', bg);
+      document.documentElement.style.setProperty('--card', card);
+      document.documentElement.style.setProperty('--accent', accent);
 
-    /* tekst zawsze kontrastowy */
-    document.documentElement.style.setProperty('--text', '#222');
-  }
+      /* tekst zawsze kontrastowy */
+      document.documentElement.style.setProperty('--text', '#222');
+    }
 
 
     function randomColorName(){
@@ -382,7 +382,7 @@
       <button class="close-btn" id="resetState">Reset</button>
     `;
     document.querySelector('.wrap').appendChild(controls);
-
+    applyRandomColors();
     let state = loadState();
 
     function loadState(){
