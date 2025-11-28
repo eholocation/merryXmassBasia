@@ -307,36 +307,261 @@
       "Najlepszy prezent to Ty."
     ];
 
-      const colorNames = [
-      '#2D3436', // Outerspace
-      '#5D6D7E', // North
-      '#CB410B', // Sinopia
-      '#0048BA', // Absolute Zero
-      '#738678', // Xanadu
-      '#E9D66B', // Xanthouse
-      '#007BA7', // Cerulean
-      '#7F00FF', // Amethyst
-      '#483C32', // Taupe
-      '#B53389', // Fandango
-      '#43B3AE', // Verdigris
-      '#E0B0FF', // Mauve
-      '#F4C430', // Saffron
+    const colorNames = [
+      '#C41E3A', // Christmas Red
+      '#006400', // Dark Green
+      '#228B22', // Forest Green
+      '#FFD700', // Gold
+      '#FFFAF0', // Snow / Off-white
+      '#8B0000', // Dark Red
+      '#32CD32', // Lime Green
+      '#FF4500', // Orange-Red
+      '#ADFF2F', // Green-Yellow
+      '#F5DEB3', // Wheat / Beige
+      '#DC143C', // Crimson
+      '#B22222', // Firebrick
+      '#FFFFE0', // Light Yellow
     ];
+
     const colorMap = {
-      Outerspace: '#2D3436',
-      North: '#5D6D7E',
-      Sinopia: '#CB410B',
-      AbsoluteZero: '#0048BA',
-      Xanadu: '#738678',
-      Xanthouse: '#E9D66B',
-      Cerulean: '#007BA7',
-      Amethyst: '#7F00FF',
-      Taupe: '#483C32',
-      Fandango: '#B53389',
-      Verdigris: '#43B3AE',
-      Mauve: '#E0B0FF',
-      Saffron: '#F4C430',
+      Red: '#C41E3A',
+      DarkGreen: '#006400',
+      ForestGreen: '#228B22',
+      Gold: '#FFD700',
+      Snow: '#FFFAF0',
+      DarkRed: '#8B0000',
+      LimeGreen: '#32CD32',
+      OrangeRed: '#FF4500',
+      GreenYellow: '#ADFF2F',
+      Wheat: '#F5DEB3',
+      Crimson: '#DC143C',
+      Firebrick: '#B22222',
+      LightYellow: '#FFFFE0',
     };
+
+/* ----------------- Christmas Background Decorations ----------------- */
+
+// Create a snowflake
+function createSnowflake() {
+  const snow = document.createElement('div');
+  snow.className = 'snowflake';
+  snow.style.left = Math.random() * 100 + 'vw';
+  snow.style.animationDuration = (5 + Math.random() * 5) + 's';
+  snow.style.opacity = 0.3 + Math.random() * 0.7;
+  snow.style.fontSize = (10 + Math.random() * 20) + 'px';
+  snow.textContent = '❄'; // Unicode snowflake
+  document.body.appendChild(snow);
+
+  setTimeout(() => snow.remove(), 10000); // remove after animation
+}
+
+// Create a floating bauble
+function createBauble() {
+  const bauble = document.createElement('div');
+  bauble.className = 'bauble';
+  bauble.style.left = Math.random() * 100 + 'vw';
+  bauble.style.backgroundColor = ['#C41E3A', '#FFD700', '#228B22'][Math.floor(Math.random()*3)];
+  bauble.style.width = bauble.style.height = (10 + Math.random() * 25) + 'px';
+  document.body.appendChild(bauble);
+
+  // animate vertical floating
+  const duration = 4 + Math.random() * 4;
+  bauble.animate([
+    { transform: 'translateY(0px) rotate(0deg)' },
+    { transform: `translateY(${window.innerHeight + 50}px) rotate(360deg)` }
+  ], {
+    duration: duration * 1000,
+    iterations: 1,
+    easing: 'linear'
+  }).onfinish = () => bauble.remove();
+}
+
+// Create a twinkling star
+function createStar() {
+  const star = document.createElement('div');
+  star.className = 'star';
+  star.style.left = Math.random() * 100 + 'vw';
+  star.style.top = Math.random() * 80 + 'vh';
+  star.style.width = star.style.height = (3 + Math.random() * 5) + 'px';
+  document.body.appendChild(star);
+
+  // twinkle animation
+  star.animate([
+    { opacity: 0.2 },
+    { opacity: 1 },
+    { opacity: 0.2 }
+  ], {
+    duration: 1000 + Math.random() * 2000,
+    iterations: Infinity,
+    direction: 'alternate'
+  });
+}
+
+// Initialize decorations with intervals
+function initChristmasDecorations() {
+  // continuously create snowflakes
+  setInterval(createSnowflake, 300);
+  // create baubles less often
+  setInterval(createBauble, 1500);
+  // stars appear once
+  for (let i=0; i<30; i++) createStar();
+}
+
+/* ----------------- Minimal CSS for decorations ----------------- */
+const style = document.createElement('style');
+style.textContent = `
+  .snowflake {
+    position: fixed;
+    top: -2em;
+    z-index: 0;
+    pointer-events: none;
+    color: white;
+    user-select: none;
+    text-shadow: 0 0 2px #000;
+    animation-name: fall;
+    animation-timing-function: linear;
+  }
+  @keyframes fall {
+    to { transform: translateY(100vh); }
+  }
+
+  .bauble {
+    position: fixed;
+    top: -30px;
+    border-radius: 50%;
+    z-index: 0;
+    pointer-events: none;
+    box-shadow: 0 0 4px rgba(0,0,0,0.4);
+  }
+
+  .star {
+    position: fixed;
+    z-index: 0;
+    pointer-events: none;
+    background: yellow;
+    border-radius: 50%;
+    box-shadow: 0 0 5px yellow;
+  }
+`;
+
+/* ----------------- Big Christmas Decorations ----------------- */
+
+// Add Santa flying across the screen
+function addSanta(param) {
+  const santa = document.createElement('div');
+  santa.className = param;
+  document.body.appendChild(santa);
+
+  const duration = 15000 + Math.random()*5000; // 15-20 sec across screen
+  santa.animate([
+    { transform: `translateX(-200px) translateY(50px)` },
+    { transform: `translateX(${window.innerWidth + 200}px) translateY(50px)` }
+  ], {
+    duration: duration,
+    iterations: Infinity,
+    easing: 'linear'
+  });
+}
+
+// Add reindeer flying behind Santa
+function addReindeer(count = 3) {
+  for (let i = 0; i < count; i++) {
+    const deer = document.createElement('div');
+    deer.className = 'reindeer';
+    deer.style.top = 50 + i*20 + 'px'; // stagger heights
+    document.body.appendChild(deer);
+
+    const duration = 15000 + Math.random()*5000;
+    deer.animate([
+      { transform: `translateX(-200px) translateY(0px)` },
+      { transform: `translateX(${window.innerWidth + 200}px) translateY(0px)` }
+    ], {
+      duration: duration,
+      iterations: Infinity,
+      easing: 'linear'
+    });
+  }
+}
+// Add reindeer flying behind Santa
+function addReindeer2(count = 3) {
+  for (let i = 0; i < count; i++) {
+    const deer = document.createElement('div');
+    deer.className = 'reindeer2';
+    deer.style.top = 50 + i*20 + 'px'; // stagger heights
+    document.body.appendChild(deer);
+
+    const duration = 15000 + Math.random()*5000;
+    deer.animate([
+      { transform: `translateX(-200px) translateY(0px)` },
+      { transform: `translateX(${window.innerWidth + 200}px) translateY(0px)` }
+    ], {
+      duration: duration,
+      iterations: Infinity,
+      easing: 'linear'
+    });
+  }
+}
+// Add reindeer flying behind Santa
+function addReindeer3(count = 3) {
+  for (let i = 0; i < count; i++) {
+    const deer = document.createElement('div');
+    deer.className = 'reindeer3';
+    deer.style.top = 50 + i*20 + 'px'; // stagger heights
+    document.body.appendChild(deer);
+
+    const duration = 15000 + Math.random()*5000;
+    deer.animate([
+      { transform: `translateX(-200px) translateY(0px)` },
+      { transform: `translateX(${window.innerWidth + 200}px) translateY(0px)` }
+    ], {
+      duration: duration,
+      iterations: Infinity,
+      easing: 'linear'
+    });
+  }
+}
+
+/* ----------------- Minimal CSS for big decorations ----------------- */
+const bigDecorStyle = document.createElement('style');
+bigDecorStyle.textContent = `
+  .reindeer {
+    position: fixed;
+    top: 0px;
+    width: 150px;
+    height: 150px;
+    z-index: 1;
+    pointer-events: none;
+    background-image: url('images/reindeer.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+  .reindeer2 {
+    position: fixed;
+    top: 75px;
+    width: 150px;
+    height: 150px;
+    z-index: 1;
+    pointer-events: none;
+    background-image: url('images/santa.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+  .reindeer3 {
+    position: fixed;
+    top: 150px;
+    width: 150px;
+    height: 150px;
+    z-index: 1;
+    pointer-events: none;
+    background-image: url('images/santa2.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+`;
+document.head.appendChild(bigDecorStyle);
+
+
+document.head.appendChild(style);
 
     function applyRandomColors() {
       const bg = colorNames[Math.floor(Math.random()*colorNames.length)];
@@ -523,6 +748,10 @@
 
     // render początkowy
     renderGrid();
+    initChristmasDecorations();
+    addReindeer(1); // number of reindeers flying behind Santa
+    addReindeer2(1); // number of reindeers flying behind Santa
+    // addReindeer3(1); // number of reindeers flying behind Santa
   }
 </script>
 </body>
