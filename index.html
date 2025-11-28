@@ -197,7 +197,11 @@
       .door {
         padding: 8px;
         border-radius: 10px;
+        background-position: center center;
+        background-size: cover;
+        background-repeat: no-repeat;
       }
+
 
       /* — normalna czytelna wielkość cyfr — */
       .door .num {
@@ -299,7 +303,7 @@
       "Najsmaczniejsze owoce dają najlepsze uśmiechy.",
       "Najlepsze uśmiechy, to najlepsze wspomnienia.",
       "Najlepsze wspomnienia tylko z Tobą.",
-      "Nawet jeśli już dawno nas tu nie będzie, to podróż dla miliona uśmiechów.",
+      "Nawet jeśli kiedyś nas tu zabraknie, wiem, że będę z Tobą do samego końca.",
       "Najlepszy prezent to Ty."
     ];
 
@@ -354,14 +358,12 @@
     }
 
     function getImage(i){ return `images/${i+1}.jpg`; }
-    function getAudio(i){ return `audio/day${i+1}.mp3`; }
 
     const defaultState = Array.from({length:24}, (_,i)=>({
       index: i,
       opened: false,
       caption: captions[i]||'',
       image: getImage(i),
-      audio: getAudio(i),
       color: ''
     }));
 
@@ -380,9 +382,6 @@
       <button class="close-btn" id="resetState">Reset</button>
     `;
     document.querySelector('.wrap').appendChild(controls);
-
-    const audioEl = document.createElement('audio');
-    audioEl.preload = 'auto';
 
     let state = loadState();
 
@@ -413,14 +412,13 @@
           d.style.backgroundPosition = 'center';
         }
         d.addEventListener('click', ()=>{
-          // const today = Number(new Date().getDate()); // pobiera aktualny dzień miesiąca (1-31)
-          const today = 4;
-          // if(i+1 > today){
-          //   alert(`To okienko możesz otworzyć dopiero ${i+1} grudnia. Dzisiaj jest ${today} grudnia.`);
-          //   return;
-          // } else {
+          const today = Number(new Date().getDate()); // pobiera aktualny dzień miesiąca (1-31)
+          if(i+1 > today-9){
+            alert(`To okienko możesz otworzyć dopiero ${i+1} grudnia. Dzisiaj jest ${today} grudnia.\n¯\\_(ツ)_/¯`);
+            return;
+          } else {
             openModal(i);
-          // }
+          }
         });
         grid.appendChild(d);
       });
@@ -437,9 +435,7 @@
     }
 
     function openModal(i){
-      console.log('before');
       applyRandomColors();
-      console.log('after');
       currentIndex = i;
       const s = state[i];
       s.opened = true;
@@ -455,10 +451,6 @@
       modalImg.src = s.image;
       modalImg.alt = `Zdjęcie dzień ${i+1}`;
 
-      audioEl.src = s.audio || 'audio/music.mp3';
-      audioEl.currentTime = 0;
-      audioEl.play().catch(()=>{});
-
       overlay.classList.add('show');
       overlay.setAttribute('aria-hidden','false');
 
@@ -469,7 +461,6 @@
     function closeModal(){
       overlay.classList.remove('show');
       overlay.setAttribute('aria-hidden','true');
-      try{ audioEl.pause(); }catch(e){}
       saveState();
     }
 
@@ -498,7 +489,6 @@
         newState[index].opened = (String(row[idxMap['opened']]||'0').trim()==='1');
         newState[index].caption = unquote(row[idxMap['caption']]);
         newState[index].image = unquote(row[idxMap['image']]) || getImage(index);
-        newState[index].audio = unquote(row[idxMap['audio']]) || getAudio(index);
         newState[index].color = unquote(row[idxMap['color']]) || '';
       }
       state = newState;
@@ -533,3 +523,4 @@
 </script>
 </body>
 </html>
+
