@@ -487,7 +487,7 @@ function addReindeer2(count = 3) {
   for (let i = 0; i < count; i++) {
     const deer = document.createElement('div');
     deer.className = 'reindeer2';
-    deer.style.top = 50 + i*20 + 'px'; // stagger heights
+    deer.style.top = 250 + i*20 + 'px'; // stagger heights
     document.body.appendChild(deer);
 
     const duration = 15000 + Math.random()*5000;
