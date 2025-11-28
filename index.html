@@ -445,6 +445,8 @@
       if(doorEl){
         doorEl.style.transform = 'scale(1.05)';
         setTimeout(()=>{doorEl.style.transform='scale(1.02)';}, 1250);
+        doorEl.style.background = `url('${s.image}') center center / cover no-repeat`;
+        doorEl.offsetHeight; // force repaint
       }
 
       modalText.textContent = s.caption || '';
