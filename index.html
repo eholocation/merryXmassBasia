@@ -638,7 +638,7 @@ document.head.appendChild(style);
         }
         d.addEventListener('click', ()=>{
           const today = Number(new Date().getDate()); // pobiera aktualny dzień miesiąca (1-31)
-          if(i+1 > today-9){
+          if(i+1 > today){
             alert(`To okienko możesz otworzyć dopiero ${i+1} grudnia. Dzisiaj jest ${today} grudnia.\n¯\\_(ツ)_/¯`);
             return;
           } else {
