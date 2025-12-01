@@ -407,6 +407,155 @@ function initChristmasDecorations() {
   for (let i=0; i<30; i++) createStar();
 }
 
+/* ----------------- Advanced Curved Lines With Stars ----------------- */
+
+function addFancyCurvedStars(count = 20) {
+  for (let i = 0; i < count; i++) {
+    createFancyLine();
+  }
+}
+
+function createFancyLine() {
+  // Random size
+  const width = 260 + Math.random() * 320;   // 260–580px
+  const height = 100 + Math.random() * 160;  // 100–260px
+
+  // Random depth layer
+  const layerPick = Math.random();
+  let z = "-2";   // background
+
+  if (layerPick > 0.66) z = "3";     // front
+  else if (layerPick > 0.33) z = "0"; // middle
+
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg.setAttribute("width", width);
+  svg.setAttribute("height", height);
+  svg.style.position = "fixed";
+  svg.style.pointerEvents = "none";
+  svg.style.zIndex = z;
+  svg.style.opacity = 0.5 + Math.random() * 0.5;
+
+  // Random placement
+  svg.style.left = Math.random() * (window.innerWidth - width) + "px";
+  svg.style.top = Math.random() * (window.innerHeight - height) + "px";
+
+  const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+
+  // Base endpoints
+  const x1 = 0;
+  const y1 = height / 2;
+  const x2 = width;
+  const y2 = height / 2;
+
+  // Random curve complexity mode
+  const shapeMode = Math.random();
+
+  let d = "";
+
+  if (shapeMode < 0.33) {
+    // Simple smooth curve
+    const cp1x = width * (0.3 + Math.random() * 0.2);
+    const cp1y = height * Math.random();
+    const cp2x = width * (0.6 + Math.random() * 0.2);
+    const cp2y = height * Math.random();
+    d = `M${x1},${y1} C${cp1x},${cp1y} ${cp2x},${cp2y} ${x2},${y2}`;
+
+  } else if (shapeMode < 0.66) {
+    // Multi-wiggle curve (2 arcs)
+    const cp1x = width * 0.25;
+    const cp1y = height * Math.random();
+    const cp2x = width * 0.45;
+    const cp2y = height * Math.random();
+    const cp3x = width * 0.65;
+    const cp3y = height * Math.random();
+    const cp4x = width * 0.85;
+    const cp4y = height * Math.random();
+    d = `
+      M${x1},${y1}
+      C${cp1x},${cp1y} ${cp2x},${cp2y} ${width * 0.5},${height / 2}
+      S${cp3x},${cp3y} ${x2},${y2}
+    `;
+
+  } else {
+    // Curvy swirl / partial spin
+    const swirlHeight = 20 + Math.random() * 40;
+    d = `
+      M${x1},${y1}
+      C${width * 0.25},${y1 - swirlHeight}
+       ${width * 0.25},${y1 + swirlHeight}
+       ${width * 0.5},${y1}
+
+      C${width * 0.75},${y1 - swirlHeight}
+       ${width * 0.75},${y1 + swirlHeight}
+       ${x2},${y2}
+    `;
+  }
+
+  path.setAttribute("d", d.trim());
+  path.setAttribute("stroke", "white");
+  path.setAttribute("stroke-width", "2");
+  path.setAttribute("fill", "none");
+
+  svg.appendChild(path);
+
+  // Star at the end
+  const star = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+  const starSize = 6 + Math.random() * 8;
+  const starPointsStr = starPoints(width - 5, height / 2, starSize, starSize * 0.45);
+
+  star.setAttribute("points", starPointsStr);
+  star.setAttribute("fill", "white");
+  star.setAttribute("stroke", "white");
+  star.setAttribute("stroke-width", "1");
+  svg.appendChild(star);
+
+  document.body.appendChild(svg);
+
+  // Shimmer animation
+  svg.animate(
+    [
+      { opacity: svg.style.opacity },
+      { opacity: parseFloat(svg.style.opacity) + 0.2 },
+      { opacity: svg.style.opacity }
+    ],
+    {
+      duration: 2500 + Math.random() * 3000,
+      iterations: Infinity,
+      easing: "ease-in-out"
+    }
+  );
+
+  // // Optional rotation spin on some lines
+  // if (Math.random() < 0.25) {
+  //   const rot = svg.animate(
+  //     [
+  //       { transform: "rotate(0deg)" },
+  //       { transform: "rotate(360deg)" }
+  //     ],
+  //     {
+  //       duration: 8000 + Math.random() * 5000,
+  //       iterations: Infinity,
+  //       easing: "linear"
+  //     }
+  //   );
+  // }
+}
+
+// Helper for star point creation
+function starPoints(cx, cy, outer, inner) {
+  let pts = "";
+  let angle = Math.PI / 2 * 3;
+  const step = Math.PI / 5;
+
+  for (let i = 0; i < 5; i++) {
+    pts += `${cx + Math.cos(angle) * outer},${cy + Math.sin(angle) * outer} `;
+    angle += step;
+    pts += `${cx + Math.cos(angle) * inner},${cy + Math.sin(angle) * inner} `;
+    angle += step;
+  }
+  return pts.trim();
+}
+
 /* ----------------- Minimal CSS for decorations ----------------- */
 const style = document.createElement('style');
 style.textContent = `
@@ -752,6 +901,7 @@ document.head.appendChild(style);
     addReindeer(1); // number of reindeers flying behind Santa
     addReindeer2(1); // number of reindeers flying behind Santa
     // addReindeer3(1); // number of reindeers flying behind Santa
+    addFancyCurvedStars(10);
   }
 </script>
 </body>
