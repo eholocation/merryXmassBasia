@@ -307,6 +307,33 @@
       "Najlepszy prezent to Ty."
     ];
 
+  /* ----------------- Background Music Autoplay ----------------- */
+
+/* ----------------- Background Music Autoplay — Silent Mode ----------------- */
+
+function enableBackgroundMusic(mp3Path = "sounds/dzien.mp3") {
+  const audio = new Audio(mp3Path);
+  audio.loop = true;
+  audio.volume = 1.0;
+
+  // Try autoplay
+  const tryPlay = audio.play();
+
+  if (tryPlay !== undefined) {
+    tryPlay.catch(() => {
+      // Autoplay blocked → wait silently for first interaction
+      const unlock = () => {
+        audio.play();
+        document.removeEventListener("click", unlock);
+        document.removeEventListener("touchstart", unlock);
+      };
+      document.addEventListener("click", unlock, { once: true });
+      document.addEventListener("touchstart", unlock, { once: true });
+    });
+  }
+}
+
+
     const colorNames = [
       '#C41E3A', // Christmas Red
       '#006400', // Dark Green
@@ -902,6 +929,7 @@ document.head.appendChild(style);
     addReindeer2(1); // number of reindeers flying behind Santa
     // addReindeer3(1); // number of reindeers flying behind Santa
     addFancyCurvedStars(10);
+    enableBackgroundMusic();
   }
 </script>
 </body>
