@@ -758,6 +758,19 @@ document.head.appendChild(style);
       return keys[Math.floor(Math.random()*keys.length)];
     }
 
+    function callWithDelay(fn, delay, ...args) {
+      setTimeout(() => fn(...args), delay);
+    }
+
+    function sayHi(i) {
+      if (i == 6) alert('Ho Ho Ho~!');
+      if (i == 17) alert('Wszystko Będzie Dobrze! :*');
+      if (i == 5) alert('Ciekawe co jutro będzie w bucie?!');
+      if (i == 1 || i == 5 || 8 || i == 10 || i == 12 || i == 15 || i == 17 || i == 19 || i == 22 || i == 24) alert('Czy wzięłaś \'Fe\'? ;)');
+      if (i == 24) alert('Wesołych Świąt Kochanie! :*');
+      if (i == 22) alert('Rosvery? :)');
+    }
+
     function getImage(i){ return `images/${i+1}.jpg`; }
 
     const defaultState = Array.from({length:24}, (_,i)=>({
@@ -775,14 +788,6 @@ document.head.appendChild(style);
     const modalTitle = document.getElementById('modalTitle');
     const closeBtn = document.getElementById('closeBtn');
 
-    // to be removed!!
-    const controls = document.createElement('div');
-    controls.style.textAlign = 'center';
-    controls.style.marginTop = '12px';
-    controls.innerHTML = `
-      <button class="close-btn" id="resetState">Reset</button>
-    `;
-    document.querySelector('.wrap').appendChild(controls);
     applyRandomColors();
     let state = loadState();
 
@@ -819,6 +824,7 @@ document.head.appendChild(style);
             return;
           } else {
             openModal(i);
+            callWithDelay(sayHi, 5000, i);
           }
         });
         grid.appendChild(d);
@@ -914,13 +920,6 @@ document.head.appendChild(style);
       return res;
     }
     function unquote(v){ if(v==null) return ''; v=String(v); if(v.startsWith('"') && v.endsWith('"')) v=v.slice(1,-1).replace(/""/g,'"'); return v; }
-
-    document.getElementById('resetState').addEventListener('click', ()=>{
-      if(!confirm('Czy na pewno zresetować wszystkie okienka?')) return;
-      state = JSON.parse(JSON.stringify(defaultState));
-      localStorage.removeItem('advent_state_v1');
-      renderGrid();
-    });
 
     // render początkowy
     renderGrid();
